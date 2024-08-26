@@ -108,8 +108,7 @@ namespace MergeSort {
             else
                 tmp[k++] = vec[j++];
         }
-        while (i<=mid)
-        {
+        while (i<=mid) {
             tmp[k++] = vec[i++];
         }
         while (j <= right) {

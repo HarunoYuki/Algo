@@ -8,7 +8,6 @@ using std::cout;
 using std::endl;
 
 struct TreeNode{
-    std::priority_queue<int, vector<int>, std::less<int>> qu;
     int val;
     TreeNode* lchild;
     TreeNode* rchild;
