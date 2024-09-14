@@ -7,6 +7,8 @@
 #include "find/find.hpp"
 #include "tree/tree.hpp"
 #include "base/list.hpp"
+#include "thread/thread.hpp"
+#include "pointer/shared_ptr.hpp"
 
 
 /**
@@ -17,7 +19,6 @@
  * @version v1
  * @date 2019-07-21
  */
-#include<iostream>
 using namespace std;
 
 class A
@@ -111,107 +112,6 @@ int coinChange(vector<int>& coins, int amount) {
     return dp[amount] == amount + 1 ? -1 : dp[amount];
 }
 
-bool wordBreak(string s, vector<string>& wordDict) {
-    unordered_set<string> st;
-    for (size_t i = 0; i < wordDict.size(); i++)
-    {
-        st.insert(wordDict[i]);
-    }
-    return true;
-}
-
-void simulator() {
-    unordered_map<int, int> mp;
-    queue<int> que;
-    int n = 0;
-    cin >> n;
-    while (n--)
-    {
-        int type = 0;
-        cin >> type;
-        if (type == 1) {
-            string s;
-            cin >> s;
-            int val = static_cast<int>(*s.c_str());
-            que.push(val);
-            mp[val]++;
-        }
-        else if (type == 2) {
-            int val = que.front();
-            que.pop();
-            mp[val]--;
-        }
-        else if (type == 3) {
-            int num = 0;
-            for (auto it = mp.begin(); it != mp.end(); it++)
-            {
-                if (it->second > 0) {
-                    num++;
-                }
-            }
-            cout << num << endl;
-        }
-    }
-}
-
-void jumpStones() {
-    int stones = 0, jd = 0;
-    cin >> stones >> jd;
-    vector<int> dis(stones);
-    vector<int> nums(jd);
-    for (size_t i = 0; i < stones; i++)
-    {
-        cin >> dis[i];
-    }
-    for (size_t i = 0; i < jd; i++)
-    {
-        cin >> nums[i];
-    }
-    int ans = 0;
-    for (size_t i = 0; i < stones; i++)
-    {
-        if (dis[i] > jd) {
-            break;
-        }
-        else {
-            int idx = dis[i] - 1;
-            if (nums[idx]>0) {
-                ans += 30;
-                nums[idx] -= 1;
-            }
-            else {
-                break;
-            }
-        }
-    }
-    cout << ans << endl;
-}
-
-class SnapshotArray {
-private:
-    vector<int> nums;
-    unordered_map<int, vector<int>> mp;
-public:
-    SnapshotArray(int length) {
-        nums.resize(length);
-    }
-
-    void set(int index, int val) {
-        nums[index] = val;
-    }
-
-    int snap() {
-        static int id = -1;
-        id++;
-        mp[id] = nums;
-        return id;
-    }
-
-    int get(int index, int snap_id) {
-        return mp[snap_id][index];
-    }
-};
-
 struct C
 {
     virtual void print();
@@ -262,8 +162,14 @@ bool isMatch(string s, string p) {
     return dp[m][n];
 }
 
+int c = 1;
 class MyClass
 {
+public:
+    int& a = c;
+    ~MyClass(){
+        cout << "Suasidj  " << endl;
+    }
 };
 
 class MyClass2: MyClass
@@ -313,7 +219,53 @@ long long qpow(long long n) {
     return ans.m[0][0];
 }
 
+template <int N>
+struct Factorial {
+    static const int value = N * Factorial<N - 1>::value;
+};
+
+// 特化模板的基准情况
+template <>
+struct Factorial<0> {
+    static const int value = 1;
+};
+
 int main() {
+    // 创建SharedPtr对象
+    SharedPtr ptr1(new int(42));
+    std::cout << "ptr1 use_count: " << ptr1.use_count() << std::endl;  // 输出 1
+
+    {
+        // 创建SharedPtr对象的副本
+        SharedPtr ptr2(ptr1);
+        std::cout << "ptr1 use_count after copy: " << ptr1.use_count() << std::endl;  // 输出 2
+        std::cout << "ptr2 use_count: " << ptr2.use_count() << std::endl;  // 输出 2
+        std::cout << "ptr2 value: " << *ptr2 << std::endl;  // 输出 42
+    }
+
+    {
+        SharedPtr ptr2(new int(0));
+        ptr2 = ptr1;
+        std::cout << "ptr1 use_count after copy: " << ptr1.use_count() << std::endl;  // 输出 2
+        std::cout << "ptr2 use_count: " << ptr2.use_count() << std::endl;  // 输出 2
+        std::cout << "ptr2 value: " << *ptr2 << std::endl;  // 输出 42
+    }
+
+    // 离开作用域，ptr2销毁
+    std::cout << "ptr1 use_count after ptr2 destroyed: " << ptr1.use_count() << std::endl;  // 输出 1
+
+    // 重置指针
+    ptr1.reset(new int(84));
+    std::cout << "ptr1 use_count after reset: " << ptr1.use_count() << std::endl;  // 输出 1
+    std::cout << "ptr1 value: " << *ptr1 << std::endl;  // 输出 84
+
+    return 0;
+
+    thread_test();
+    //cout << MYmax(1, 2)<<endl;
+    //cout << MYmax(1.0, 2.0)<<endl;
+
+    int result = Factorial<5>::value;  // 计算5! = 120
     int* b = (int*)malloc(0);
     int* a = new int[0];
     cout << a << endl;
@@ -328,6 +280,8 @@ int main() {
     //A val;
     //a.push_back(val);
     //a.emplace_back(val);
+    auto tem = std::make_shared<MyClass>();
+    tem.reset();
     //cout<< sizeof(MyClass) <<endl;
     //cout<< sizeof(MyClass2) <<endl;
 

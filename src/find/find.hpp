@@ -1,3 +1,4 @@
+#pragma once
 #include <iostream>
 #include <vector>
 
@@ -44,7 +45,6 @@ int binarySearchLeftEdge(vector<int>& vec, int target) {
 	}
 	return i;
 }
-
 
 void findTest() {
 	vector<int> vec = { 0,1,2,3,4,5,6,7,8,8,8,8,8,9 };
