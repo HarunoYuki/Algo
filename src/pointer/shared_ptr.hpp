@@ -1,78 +1,7 @@
 #pragma once
 #include <iostream>
 
-//class SharedPtr
-//{
-//private:
-//	int* cnt;
-//	int* ptr;
-//
-//public:
-//	SharedPtr() :ptr(nullptr), cnt(new int(0)) {}
-//	SharedPtr(int* p) :ptr(p), cnt(new int(1)) {}
-//	SharedPtr(const SharedPtr& other) :ptr(other.ptr), cnt(other.cnt) {
-//		(*cnt)++;
-//	}
-//	SharedPtr(SharedPtr&& other) :ptr(other.ptr), cnt(other.cnt) {
-//		other.ptr = nullptr;
-//		other.cnt = nullptr;
-//	}
-//	SharedPtr& operator=(const SharedPtr& other) {
-//		if (this != &other) {
-//			release();
-//			this->ptr = other.ptr;
-//			this->cnt = other.cnt;
-//			(*cnt)++;
-//		}
-//		return *this;
-//	}
-//	SharedPtr& operator=(SharedPtr&& other) {
-//		if (this != &other) {
-//			release();
-//			this->ptr = other.ptr;
-//			this->cnt = other.cnt;
-//			other.ptr = nullptr;
-//			other.cnt = nullptr;
-//		}
-//		return *this;
-//	}
-//	int& operator*()const {
-//		return *ptr;
-//	}
-//	int* operator->() {
-//		return ptr;
-//	}
-//	int use_count()const {
-//		return *cnt;
-//	}
-//
-//	void reset(int* p = nullptr) {
-//		release();
-//		if (p) {
-//			ptr = p;
-//			cnt = new int(1);
-//		}
-//		else {
-//			ptr = nullptr;
-//			cnt = new int(0);
-//		}
-//	}
-//
-//	~SharedPtr() {
-//		release();
-//	}
-//
-//private:
-//	void release() {
-//		if (cnt && --(*cnt) == 0) {
-//			delete ptr;
-//			delete cnt;
-//		}
-//	}
-//};
-
-using T = int;
-
+template<class T>
 class SharedPtr
 {
 private:
@@ -98,7 +27,7 @@ public:
 		}
 		return *this;
 	}
-	SharedPtr& operator=(SharedPtr&& other) {
+	SharedPtr& operator=(SharedPtr&& other) noexcept {
 		if (this != &other) {
 			release();
 			ptr = other.ptr;
@@ -120,7 +49,7 @@ public:
 		return *ref_cnt;
 	}
 
-	void reset(T* p) {
+	void reset(T* p=nullptr) {
 		release();
 		if (p) {
 			ptr = p;

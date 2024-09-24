@@ -5,14 +5,14 @@ class MyQueue
 {
 private:
 	int* nums;
-	int front;
+	int head;
 	int queSize;
 	int queCapacity;
 
 public:
 	MyQueue(int capacity):queCapacity(capacity) {
 		nums = new int[queCapacity];
-		front = queSize = 0;
+		head = queSize = 0;
 	}
 	~MyQueue() {
 		delete[] nums;
@@ -31,10 +31,10 @@ public:
 	}
 
 	int index() {
-		return (front + queSize) % queCapacity;
+		return (head + queSize) % queCapacity;
 	}
 
-	void push_back(int num) {
+	void push(int num) {
 		if (queSize == queCapacity) {
 
 		}
@@ -43,9 +43,9 @@ public:
 		queSize++;
 	}
 
-	int pop_front() {
-		int tmp = nums[front];
-		front = (front + 1) % queCapacity;
+	int pop() {
+		int tmp = front();
+		head = (head + 1) % queCapacity;
 		queSize--;
 		return tmp;
 	}
@@ -54,7 +54,7 @@ public:
 		if (empty()) {
 			throw("Full Queue");
 		}
-		return nums[front];
+		return nums[head];
 	}
 
 private:

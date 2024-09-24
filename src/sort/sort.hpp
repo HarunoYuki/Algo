@@ -5,12 +5,8 @@
 using std::vector;
 using std::cout;
 using std::endl;
+using std::swap;
 
-void swap(int& x, int& y) {
-    int z = x;
-    x = y;
-    y = z;
-}
 namespace QuickSort {
     /** 
      * T: O(nlogn)->O(n^2) 平均logn层 每层n  基准数优化：选左中右三个的中位数为基准数
@@ -130,6 +126,9 @@ namespace MergeSort {
     }
 }
 
+namespace HeapSort {
+
+}
 
 void sortTest() {
     vector<int> vec = { 2,4,3,8,1,6,4 };

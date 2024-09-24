@@ -1,6 +1,7 @@
 #include <iostream>
 #include <algorithm>
 #include <string>
+#include <ranges>
 #include <unordered_set>
 #include <unordered_map>
 #include "sort/sort.hpp"
@@ -230,21 +231,30 @@ struct Factorial<0> {
     static const int value = 1;
 };
 
+
+
 int main() {
+    treeTest();
+    ThreadPool pool(4);
+    auto result1 = pool.push([] {return string("Hello From ThreadPool"); });
+    auto result2 = pool.push([](int x, int y) {return x * y; }, 1, 5);
+    cout << result1.get() << endl;
+    cout << result2.get() << endl;
+
     // 创建SharedPtr对象
-    SharedPtr ptr1(new int(42));
+    SharedPtr<int> ptr1(new int(42));
     std::cout << "ptr1 use_count: " << ptr1.use_count() << std::endl;  // 输出 1
 
     {
         // 创建SharedPtr对象的副本
-        SharedPtr ptr2(ptr1);
+        SharedPtr<int> ptr2(ptr1);
         std::cout << "ptr1 use_count after copy: " << ptr1.use_count() << std::endl;  // 输出 2
         std::cout << "ptr2 use_count: " << ptr2.use_count() << std::endl;  // 输出 2
         std::cout << "ptr2 value: " << *ptr2 << std::endl;  // 输出 42
     }
 
     {
-        SharedPtr ptr2(new int(0));
+        SharedPtr<int> ptr2(new int(0));
         ptr2 = ptr1;
         std::cout << "ptr1 use_count after copy: " << ptr1.use_count() << std::endl;  // 输出 2
         std::cout << "ptr2 use_count: " << ptr2.use_count() << std::endl;  // 输出 2
