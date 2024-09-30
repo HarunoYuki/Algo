@@ -12,79 +12,29 @@ namespace QuickSort {
      * T: O(nlogn)->O(n^2) 平均logn层 每层n  基准数优化：选左中右三个的中位数为基准数
      * O: O(n)->O(logn) 栈帧 尾递归优化：只递归数组短的一段
      * */
-	int partition(vector<int>& num, int left, int right) {
-		int i = left, j = right;
-		while (i<j)
-		{
-			while (i < j && num[j] >= num[left]) j--;
-			while (i < j && num[i] <= num[left]) i++;
-			swap(num[i], num[j]);
-		}
-		swap(num[i], num[left]);
-		return i;
-	}
-	void quickSort(vector<int>& num, int left, int right) {
-		if (left >= right) return;
-		int pivot = partition(num, left, right);
-		quickSort(num, left, pivot - 1);
-		quickSort(num, pivot + 1, right);
-	}
+    int partition(vector<int>& num, int left, int right);
+    void quickSort(vector<int>& num, int left, int right);
 }
 namespace SelectionSort{
     /**
      * T: O(n^2) 非自适应 循环次数 n-1 n-2 ... 2 1 求和n*(n-1)/2
      * O: O(1) 原地
      * 非稳定 */
-    void selectionSort(vector<int>& vec){
-        int n = vec.size();
-        for (size_t i = 0; i < n-1; i++)
-        {
-            int k = i;
-            for (size_t j = i+1; j < n; j++)
-            {
-                if (vec[j] < vec[k]) k = j;
-            }
-            swap(vec[i],vec[k]);
-        }
-    }
+    void selectionSort(vector<int>& vec);
 }
 namespace BubbleSort {
     /**
      * T: O(n^2)->O(n) 自适应  效率优化 循环次数 n-1 n-2 ... 2 1 求和n*(n-1)/2
      * O: O(1) 原地
      * 稳定 */
-    void bubbleSort(vector<int>& vec) {
-        int n = vec.size();
-        for (size_t i = n-1; i > 0; i--)
-        {
-            bool flag = false;
-            for (size_t j = 0; j < i; j++)
-            {
-                if (vec[j] > vec[j + 1]) {
-                    flag = true;
-                    swap(vec[j], vec[j+1]);
-                }
-            }
-            if (!flag) { break; }
-        }
-    }
+    void bubbleSort(vector<int>& vec);
 }
 namespace InsertionSort{
     /**
      * T: O(n^2)->O(n) 自适应  效率优化 循环次数 n-1 n-2 ... 2 1 求和n*(n-1)/2
      * O: O(1) 原地
      * 稳定 */
-    void insertionSort(vector<int>& vec) {
-        for (size_t i = 1; i < vec.size(); i++)
-        {
-            int base = vec[i], j = i - 1;
-            for (;j >=0 && vec[j]>base; j--)
-            {
-                vec[j + 1] = vec[j];
-            }
-            vec[j + 1] = base;
-        }
-    }
+    void insertionSort(vector<int>& vec);
 }
 /*
 而在数据量较小时，复杂度不占主导地位，每轮中的单元操作数量起到决定性作用。
@@ -95,79 +45,13 @@ namespace InsertionSort{
 选择排序不稳定，无法应用于多级排序。
 */
 namespace MergeSort {
-    void merge(vector<int>& vec, int left,int mid, int right) {
-        vector<int> tmp(right-left+1);
-        int i = left, j = mid + 1, k = 0;
-        while (i<=mid && j<=right)
-        {
-            if (vec[i] < vec[j])
-                tmp[k++] = vec[i++];
-            else
-                tmp[k++] = vec[j++];
-        }
-        while (i<=mid) {
-            tmp[k++] = vec[i++];
-        }
-        while (j <= right) {
-            tmp[k++] = vec[j++];
-        }
-
-        for (size_t k = 0; k < tmp.size(); k++)
-        {
-            vec[left + k] = tmp[k];
-        }
-    }
-    void mergeSort(vector<int>& vec,int left,int right) {
-        if (left >= right) { return; }
-        int mid = left + (right - left) / 2;
-        mergeSort(vec,left,mid);
-        mergeSort(vec,mid+1,right);
-        merge(vec,left,mid,right);
-    }
+    void merge(vector<int>& vec, int left, int mid, int right);
+    void mergeSort(vector<int>& vec, int left, int right);
 }
 
 namespace HeapSort {
-
+    void siftDown(vector<int>& num, int n, int i);
+    void heapSort(vector<int>& num);
 }
 
-void sortTest() {
-    vector<int> vec = { 2,4,3,8,1,6,4 };
-    QuickSort::quickSort(vec, 0, vec.size() - 1);
-    cout << "Quick Sort: ";
-    for (int val : vec) {
-        cout << val << " ";
-    }
-    cout << endl;
-
-    vec = { 2,4,3,8,1,6,4 };
-    SelectionSort::selectionSort(vec);
-    cout << "Selection Sort: ";
-    for (int val : vec) {
-        cout << val << " ";
-    }
-    cout << endl;
-
-    vec = { 2,4,3,8,1,6,4 };
-    BubbleSort::bubbleSort(vec);
-    cout << "BubbleSort Sort: ";
-    for (int val : vec) {
-        cout << val << " ";
-    }
-    cout << endl;
-
-    vec = { 2,4,3,8,1,6,4 };
-    InsertionSort::insertionSort(vec);
-    cout << "Insertion Sort: ";
-    for (int val : vec) {
-        cout << val << " ";
-    }
-    cout << endl;
-
-    vec = { 2,4,3,8,1,6,4 };
-    MergeSort::mergeSort(vec, 0, vec.size() - 1);
-    cout << "Merge Sort: ";
-    for (int val : vec) {
-        cout << val << " ";
-    }
-    cout << endl;
-}
+void sortTest();

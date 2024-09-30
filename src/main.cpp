@@ -25,16 +25,18 @@ using namespace std;
 class A
 {
 public:
-    double b;
-    A() {
-        fun();
-    }
-    ~A() {
-        fun();
-    }
-    virtual void fun() {
+    short a;
+    char c;
+    int b;
+    //A() {
+    //    fun();
+    //}
+    //~A() {
+    //    fun();
+    //}
+    //virtual void fun() {
 
-    }
+    //}
 };
 
 class B :A {
@@ -234,7 +236,16 @@ struct Factorial<0> {
 
 
 int main() {
+    function<int(int)> dfs = [&](int i)->int {
+        if (i < 0) {
+            return 0;
+        }
+        return dfs(i - 1) + i;
+    };
+    cout << dfs(5) << endl;
+
     treeTest();
+    sortTest();
     ThreadPool pool(4);
     auto result1 = pool.push([] {return string("Hello From ThreadPool"); });
     auto result2 = pool.push([](int x, int y) {return x * y; }, 1, 5);
